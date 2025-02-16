@@ -9,13 +9,10 @@ if not os.path.exists(log_dir):
 
 
 class PrefixFormatter(logging.Formatter):
-    """自定义格式化器，为 DEBUG 级别日志添加开源项目前缀"""
-
     def format(self, record):
-        if record.levelno == logging.DEBUG:  # 只给 DEBUG 级别添加前缀
-            record.msg = f"[开源项目：https://github.com/chengazhen/cursor-auto-free] {record.msg}"
+        if record.levelno == logging.DEBUG:
+            record.msg = f"[Project: https://github.com/cappuch/cursor-auto-free] {record.msg}"
         return super().format(record)
-
 
 logging.basicConfig(
     level=logging.DEBUG,
@@ -28,7 +25,6 @@ logging.basicConfig(
     ],
 )
 
-# 为文件处理器设置自定义格式化器
 for handler in logging.getLogger().handlers:
     if isinstance(handler, logging.FileHandler):
         handler.setFormatter(
@@ -36,15 +32,12 @@ for handler in logging.getLogger().handlers:
         )
 
 
-# 创建控制台处理器
 console_handler = logging.StreamHandler()
 console_handler.setLevel(logging.INFO)
 console_handler.setFormatter(PrefixFormatter("%(message)s"))
 
-# 将控制台处理器添加到日志记录器
 logging.getLogger().addHandler(console_handler)
 
-# 打印日志目录所在路径
 logging.info(f"Logger initialized, log directory: {os.path.abspath(log_dir)}")
 
 
